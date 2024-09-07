@@ -44,12 +44,14 @@ async function insertDataInAPI(data: Omit<CharactersDatabase, "id">) {
 }
 
 export async function tranferData() {
+  let isLoading = true;
+  let isFirstTime = true;
   if ((await verifyDatabase()) == false) {
     const baseURL = "https://rickandmortyapi.com/api/character";
 
     const RequestsArray = [];
 
-    for (let i = 0; i < 43; i++) {
+    for (let i = 1; i < 43; i++) {
       RequestsArray.push(fetch(baseURL + `?page=${i}`));
     }
 
@@ -94,12 +96,13 @@ export async function tranferData() {
         status = false;
       }
 
-      let species = currentCharacter.name;
+      let species = currentCharacter.species;
       let type = currentCharacter.type;
       let gender = currentCharacter.gender;
       let origin_name = currentCharacter.origin.name;
       let location_name = currentCharacter.location.name;
       let image = currentCharacter.image;
+
       const response = await insertDataInAPI({
         name,
         status,
@@ -113,8 +116,11 @@ export async function tranferData() {
 
       console.log(response);
     }
+
     console.log("Carregamento Completo, Dados Salvos no Banco!");
+    return [(isLoading = false), (isFirstTime = false)];
   } else {
     console.log("Carregamento Completo, Dados Buscados do Banco!");
+    return [(isLoading = false), (isFirstTime = false)];
   }
 }
