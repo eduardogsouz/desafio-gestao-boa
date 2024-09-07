@@ -5,7 +5,7 @@ export async function initializeDatabase(database: SQLiteDatabase) {
         CREATE TABLE IF NOT EXISTS characters (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
-            status TEXT NOT NULL,
+            status BOOLEAN,
             species TEXT NOT NULL,
             type TEXT,
             gender TEXT,
