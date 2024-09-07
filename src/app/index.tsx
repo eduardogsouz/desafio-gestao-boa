@@ -5,19 +5,23 @@ import {
   Image,
   Dimensions,
   ScrollView,
-  PixelRatio,
-  Pressable,
 } from "react-native";
+import { useEffect } from "react";
 
 import { globalStyles } from "@/styles/globalStyles";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import CharacterCard from "@/components/CharacterCard";
+import { tranferData } from "@/database/APIFromDatabase";
 
 const widthScreen = Dimensions.get("screen").width;
 const heightScreen = Dimensions.get("screen").height;
 
 const App = () => {
+  useEffect(() => {
+    tranferData();
+  }, []);
+
   return (
     <ScrollView
       style={globalStyles.background}

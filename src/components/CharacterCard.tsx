@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function CharacterCard() {
   const [text, setText] = useState("Mythological Creature"); // Será substituido pelo banco de dados!
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   category: {
-    fontSize: 21,
+    fontSize: 19,
     textAlign: "center",
   },
 });
