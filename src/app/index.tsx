@@ -1,4 +1,11 @@
-import { StyleSheet, View, Image, Dimensions, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  Text,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 import { useEffect, useState } from "react";
 
 import Button from "@/components/Button";
@@ -17,7 +24,6 @@ const widthScreen = Dimensions.get("screen").width;
 const App = () => {
   const [characters, setCharacters] = useState<CharactersDatabase[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isFirstTime, setFirstTime] = useState(true);
   const [search, setSearch] = useState("");
   const characterDatabase = useCharactersDatabase();
 
@@ -31,9 +37,8 @@ const App = () => {
   }
 
   async function loading() {
-    const [dataLoading, dataFirstTime] = await tranferData();
+    const dataLoading = await tranferData();
     setIsLoading(dataLoading);
-    setFirstTime(dataFirstTime);
   }
 
   useEffect(() => {
@@ -70,7 +75,6 @@ const App = () => {
       </View>
 
       <CharacterList
-        isFirstTime={isFirstTime}
         isLoading={isLoading}
         data={characters}
         scrollEnabled={false}
@@ -78,7 +82,6 @@ const App = () => {
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => <CharacterCard data={item} />}
         columnWrapperStyle={styles.listCards}
-        contentContainerStyle={{ paddingBottom: "10%" }}
       />
     </ScrollView>
   );

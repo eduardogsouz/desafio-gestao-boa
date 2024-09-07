@@ -45,7 +45,6 @@ async function insertDataInAPI(data: Omit<CharactersDatabase, "id">) {
 
 export async function tranferData() {
   let isLoading = true;
-  let isFirstTime = true;
   if ((await verifyDatabase()) == false) {
     const baseURL = "https://rickandmortyapi.com/api/character";
 
@@ -118,9 +117,9 @@ export async function tranferData() {
     }
 
     console.log("Carregamento Completo, Dados Salvos no Banco!");
-    return [(isLoading = false), (isFirstTime = false)];
+    return (isLoading = false);
   } else {
     console.log("Carregamento Completo, Dados Buscados do Banco!");
-    return [(isLoading = false), (isFirstTime = false)];
+    return (isLoading = false);
   }
 }
