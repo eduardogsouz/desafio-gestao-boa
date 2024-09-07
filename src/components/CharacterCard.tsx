@@ -1,17 +1,32 @@
 import React, { useState } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Pressable,
+  PressableProps,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export default function CharacterCard() {
-  const [text, setText] = useState("Mythological Creature"); // Será substituido pelo banco de dados!
-  const [isAlive, setIsAlive] = useState(true); // Será substituido pelo banco de dados!
+type Props = PressableProps & {
+  data: {
+    id: string;
+    name: string;
+    status: boolean;
+    species: string;
+    image: string | null;
+  };
+};
+
+export default function CharacterCard({ data, ...rest }: Props) {
   return (
-    <View style={styles.card}>
+    <Pressable {...rest} style={styles.card}>
       <View>
         <View style={{ height: 170 }}>
           <Image
             source={{
-              uri: "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+              uri: `${data.image}`,
             }}
             style={[styles.image]}
           />
@@ -19,7 +34,7 @@ export default function CharacterCard() {
         <View
           style={[
             styles.IconContainer,
-            isAlive == true
+            data.status == true
               ? { backgroundColor: "#48bb78" }
               : { backgroundColor: "#c80000" },
           ]}
@@ -27,32 +42,32 @@ export default function CharacterCard() {
           <Image
             style={{ height: 28, width: 28, resizeMode: "contain" }}
             source={
-              isAlive == true
+              data.status == true
                 ? require("@/assets/images/Alive.png")
                 : require("@/assets/images/tomb.png")
             }
           />
         </View>
         <View style={styles.nameContainer}>
-          <Text style={styles.name}>Rick Sanchez</Text>
+          <Text style={styles.name}>{data.name}</Text>
         </View>
       </View>
       <View style={styles.contentContainer}>
         <View
           style={[
             styles.categoryContainer,
-            text.length < 10
+            data.species.length < 10
               ? { marginHorizontal: 10 }
               : { marginHorizontal: 0 },
           ]}
         >
           <MaterialCommunityIcons name="alien-outline" size={25} />
           <Text allowFontScaling={true} style={[styles.category]}>
-            {text}
+            {data.species}
           </Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
 

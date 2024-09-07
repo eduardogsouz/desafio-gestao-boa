@@ -1,26 +1,45 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  Dimensions,
-  ScrollView,
-} from "react-native";
-import { useEffect } from "react";
+import { StyleSheet, View, Image, Dimensions, ScrollView } from "react-native";
+import { useEffect, useState } from "react";
 
-import { globalStyles } from "@/styles/globalStyles";
 import Button from "@/components/Button";
-import Input from "@/components/Input";
 import CharacterCard from "@/components/CharacterCard";
-import { tranferData } from "@/database/APIFromDatabase";
+import CharacterList from "@/components/CharacterList";
+import Input from "@/components/Input";
 
-const widthScreen = Dimensions.get("screen").width;
+import { CharactersDatabase } from "@/types/CharacterDataBase";
+import { globalStyles } from "@/styles/globalStyles";
+import { tranferData } from "@/database/APIFromDatabase";
+import { useCharactersDatabase } from "@/database/useCharactersDatabase";
+
 const heightScreen = Dimensions.get("screen").height;
+const widthScreen = Dimensions.get("screen").width;
 
 const App = () => {
+  const [characters, setCharacters] = useState<CharactersDatabase[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFirstTime, setFirstTime] = useState(true);
+  const [search, setSearch] = useState("");
+  const characterDatabase = useCharactersDatabase();
+
+  async function list() {
+    try {
+      const response = await characterDatabase.searchByName(search);
+      setCharacters(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function loading() {
+    const [dataLoading, dataFirstTime] = await tranferData();
+    setIsLoading(dataLoading);
+    setFirstTime(dataFirstTime);
+  }
+
   useEffect(() => {
-    tranferData();
-  }, []);
+    loading();
+    list();
+  }, [search, isLoading]);
 
   return (
     <ScrollView
@@ -43,15 +62,24 @@ const App = () => {
           placeholderTextColor={"rgba(158, 187, 187, 0.5)"}
           textAlign="center"
           style={styles.searchinput}
+          onChangeText={setSearch}
         />
         <Button style={styles.homebuttons}>
           <Button.Icon icon="filter" size={30} />
         </Button>
       </View>
 
-      <View style={styles.listCards}>
-        <CharacterCard />
-      </View>
+      <CharacterList
+        isFirstTime={isFirstTime}
+        isLoading={isLoading}
+        data={characters}
+        scrollEnabled={false}
+        numColumns={2}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={({ item }) => <CharacterCard data={item} />}
+        columnWrapperStyle={styles.listCards}
+        contentContainerStyle={{ paddingBottom: "10%" }}
+      />
     </ScrollView>
   );
 };
@@ -85,6 +113,7 @@ const styles = StyleSheet.create({
   },
 
   searchinput: {
+    color: "#FFFFFF",
     fontSize: 17,
     width: widthScreen * 0.766,
     backgroundColor: "#374151",
