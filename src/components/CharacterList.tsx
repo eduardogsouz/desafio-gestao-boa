@@ -1,5 +1,5 @@
 import { CharactersDatabase } from "@/types/CharacterDataBase";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -20,9 +20,11 @@ export default function CharacterList({
   isLoading,
   ...rest
 }: CharacterListProps) {
-  const [numberCards, setNumberCards] = useState(40);
+  const [numberCards, setNumberCards] = useState(10);
   const [loadingCards, setLoadingCards] = useState(false);
   const [isModalVisible, setModalVisible] = useState(true);
+
+  const renderData = data.slice(numberCards - 10, numberCards);
 
   const renderFooter = () => {
     if (loadingCards == false) {
@@ -65,11 +67,11 @@ export default function CharacterList({
   } else {
     return (
       <FlatList
-        data={data.slice(0, numberCards)}
+        data={renderData}
         onEndReached={() => (
           setNumberCards(numberCards + 20), setLoadingCards(true)
         )}
-        onEndReachedThreshold={0.2}
+        onEndReachedThreshold={0.5}
         ListFooterComponent={renderFooter}
         {...rest}
       />

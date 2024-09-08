@@ -7,6 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useEffect, useState } from "react";
+import { Link, router } from "expo-router";
 
 import Button from "@/components/Button";
 import CharacterCard from "@/components/CharacterCard";
@@ -25,6 +26,7 @@ const App = () => {
   const [characters, setCharacters] = useState<CharactersDatabase[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
+
   const characterDatabase = useCharactersDatabase();
 
   async function list() {
@@ -56,9 +58,11 @@ const App = () => {
           style={styles.logo}
           source={require("@/assets/images/Logo.png")}
         />
-        <Button style={styles.homebuttons}>
-          <Button.Icon icon="plus" size={30} />
-        </Button>
+        <Link href={"/forms/CharacterCreationForm"} asChild>
+          <Button style={styles.homebuttons}>
+            <Button.Icon icon="plus" size={30} />
+          </Button>
+        </Link>
       </View>
 
       <View style={{ flex: 1, flexDirection: "row", marginTop: "8%", gap: 10 }}>
@@ -80,7 +84,12 @@ const App = () => {
         scrollEnabled={false}
         numColumns={2}
         keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => <CharacterCard data={item} />}
+        renderItem={({ item }) => (
+          <CharacterCard
+            onPress={() => router.navigate("/details/" + item.id)}
+            data={item}
+          />
+        )}
         columnWrapperStyle={styles.listCards}
       />
     </ScrollView>

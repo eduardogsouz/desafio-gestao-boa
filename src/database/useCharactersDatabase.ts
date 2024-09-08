@@ -4,6 +4,21 @@ import { useSQLiteContext } from "expo-sqlite";
 export function useCharactersDatabase() {
   const database = useSQLiteContext();
 
+  async function showDetails(id: number) {
+    try {
+      const query = "SELECT * FROM characters WHERE id = ?";
+
+      const response = await database.getFirstAsync<CharactersDatabase>(
+        query,
+        id
+      );
+
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async function insert(data: Omit<CharactersDatabase, "id">) {
     const statement = await database.prepareAsync(
       "INSERT INTO characters (name, status, species, type, gender, origin_name, location_name) VALUES ($name, $status, $species, $type, $gender, $origin_name, $location_name)"
@@ -43,5 +58,5 @@ export function useCharactersDatabase() {
     }
   }
 
-  return { insert, searchByName };
+  return { insert, searchByName, showDetails };
 }

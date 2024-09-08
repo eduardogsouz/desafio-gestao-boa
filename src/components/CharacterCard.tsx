@@ -6,10 +6,12 @@ import {
   StyleSheet,
   Pressable,
   PressableProps,
+  TouchableOpacity,
+  TouchableOpacityProps,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-type Props = PressableProps & {
+type Props = TouchableOpacityProps & {
   data: {
     id: string;
     name: string;
@@ -21,7 +23,7 @@ type Props = PressableProps & {
 
 export default function CharacterCard({ data, ...rest }: Props) {
   return (
-    <Pressable {...rest} style={styles.card}>
+    <TouchableOpacity {...rest} style={styles.card}>
       <View>
         <View style={{ height: 170 }}>
           <Image
@@ -67,7 +69,7 @@ export default function CharacterCard({ data, ...rest }: Props) {
           </Text>
         </View>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 }
 

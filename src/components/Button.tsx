@@ -4,12 +4,7 @@ import { IIconProps } from "@/interfaces/ButtonInterfaces";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 
 function Button({ ...restProps }: PressableProps) {
-  return (
-    <Pressable
-      {...restProps}
-      onPress={() => console.log("Funciona!")}
-    ></Pressable>
-  );
+  return <Pressable {...restProps}></Pressable>;
 }
 
 function Icon({ icon, size, color }: IIconProps) {
