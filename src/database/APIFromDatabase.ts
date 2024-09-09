@@ -116,10 +116,11 @@ export async function tranferData() {
       console.log(response);
     }
 
-    console.log("Carregamento Completo, Dados Salvos no Banco!");
+    console.log(
+      "Carregamento Completo, Dados baixados da API no Banco (OBS: O app sera aberto com dados do banco de dados) !"
+    );
     return (isLoading = false);
   } else {
-    console.log("Carregamento Completo, Dados Buscados do Banco!");
     return (isLoading = false);
   }
 }

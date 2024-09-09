@@ -3,18 +3,19 @@ import {
   View,
   Image,
   Dimensions,
+  Text,
   SafeAreaView,
 } from "react-native";
 import { useEffect, useState } from "react";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 
 import Button from "@/components/Button";
 import CharacterCard from "@/components/CharacterCard";
 import CharacterList from "@/components/CharacterList";
 import Input from "@/components/Input";
+import FilterModal from "@/components/modalFilter";
 
 import { CharactersDatabase } from "@/types/CharacterDataBase";
-import { globalStyles } from "@/styles/globalStyles";
 import { tranferData } from "@/database/APIFromDatabase";
 import { useCharactersDatabase } from "@/database/useCharactersDatabase";
 
@@ -26,6 +27,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [whichStatus, setWhichStatus] = useState(2);
   const [search, setSearch] = useState("");
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
 
   const characterDatabase = useCharactersDatabase();
 
@@ -49,7 +51,7 @@ const App = () => {
   useEffect(() => {
     loading();
     list();
-  }, [search, isLoading]);
+  }, [search, isLoading, whichStatus]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -74,7 +76,10 @@ const App = () => {
           style={styles.searchinput}
           onChangeText={setSearch}
         />
-        <Button style={styles.homebuttons}>
+        <Button
+          style={styles.homebuttons}
+          onPress={() => setIsFilterVisible(true)}
+        >
           <Button.Icon icon="filter" size={30} />
         </Button>
       </View>
@@ -91,6 +96,13 @@ const App = () => {
           />
         )}
         columnWrapperStyle={styles.listCards}
+      />
+
+      <FilterModal
+        whichStatus={whichStatus}
+        isVisible={isFilterVisible}
+        onApply={(status) => setWhichStatus(status)}
+        onClose={(visibility) => setIsFilterVisible(visibility)}
       />
     </SafeAreaView>
   );

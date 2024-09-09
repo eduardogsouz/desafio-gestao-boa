@@ -44,15 +44,62 @@ export function useCharactersDatabase() {
     }
   }
 
-  async function searchByName(name: string) {
-    const query = "SELECT * FROM characters WHERE name LIKE ?";
-    try {
-      const response = await database.getAllAsync<CharactersDatabase>(
-        query,
-        `%${name}%`
-      );
+  async function searchByName(name: string, status: number) {
+    if (status > 1) {
+      const query = "SELECT * FROM characters WHERE name LIKE ?";
+      try {
+        const response = await database.getAllAsync<CharactersDatabase>(
+          query,
+          `%${name}%`,
+          status
+        );
 
-      return response;
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    } else {
+      const query = "SELECT * FROM characters WHERE name LIKE ? AND status= ? ";
+      try {
+        const response = await database.getAllAsync<CharactersDatabase>(
+          query,
+          `%${name}%`,
+          status
+        );
+
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    }
+  }
+
+  async function update(data: CharactersDatabase) {
+    const statement = await database.prepareAsync(
+      "UPDATE products SET name = $name, status = $status, species = $species, type = $type, gender = $gender, origin_name = $origin_name, location_name = $location_name, WHERE id = $id"
+    );
+
+    try {
+      await statement.executeAsync({
+        $id: data.id,
+        $name: data.name,
+        $status: data.status,
+        $species: data.species,
+        $type: data.type,
+        $gender: data.gender,
+        $origin_name: data.origin_name,
+        $location_name: data.location_name,
+      });
+    } catch (error) {
+      throw error;
+    } finally {
+      await statement.finalizeAsync();
+    }
+  }
+
+  async function remove(id: number) {
+    try {
+      await database.execAsync("DELETE FROM products WHERE id = " + id);
     } catch (error) {
       throw error;
     }

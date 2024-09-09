@@ -1,5 +1,5 @@
 import { CharactersDatabase } from "@/types/CharacterDataBase";
-import React, { createRef, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -63,11 +63,7 @@ export default function CharacterList({
           alignItems: "center",
         }}
       >
-        <Modal
-          isVisible={isModalVisible}
-          style={{ alignItems: "center" }}
-          swipeDirection={["up", "left", "right", "down"]}
-        >
+        <Modal isVisible={isModalVisible} style={{ alignItems: "center" }}>
           <View style={styles.container}>
             <ActivityIndicator size="large" />
             <Text style={styles.text}>Carregando...</Text>
