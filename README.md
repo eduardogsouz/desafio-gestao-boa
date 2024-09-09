@@ -28,7 +28,7 @@ O app deve apresentar todos os personagens da série e permitir um filtro por no
 - [x] Reload para voltar para o inicio dos personagens;
 - [x] Filtro de personagens;
 - [x] Navegação entre telas;
-- [x] Adição, Remoção e exclusão de personagens;
+- [x] Adição, alteração e exclusão de personagens;
 - [x] Trazer as informações do personagem;
 
 ## 🛠 Tecnologias utilizadas
