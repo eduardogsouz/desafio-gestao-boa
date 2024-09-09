@@ -62,7 +62,7 @@ export default function Details() {
         <Text style={styles.headerTitle}>Detalhes</Text>
       </View>
 
-      <View style={styles.imageContainer}>
+      <View>
         {imageData == null ? (
           <Image
             source={{
@@ -166,26 +166,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#1c1c1c",
   },
+
   header: {
     flexDirection: "row",
     alignItems: "center",
     padding: width * 0.04,
     paddingTop: height * 0.06,
   },
+
   headerTitle: {
     color: "#00b5cc",
     fontSize: width * 0.045,
     fontWeight: "bold",
-    marginLeft: width * 0.04,
+    marginLeft: width * 0.02,
   },
-  imageContainer: {
-    position: "relative",
-  },
+
   image: {
     width: "100%",
     height: height * 0.4,
     resizeMode: "cover",
   },
+
   iconContainer: {
     position: "absolute",
     top: height * 0.02,
@@ -194,16 +195,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+
   iconBackground: {
     borderRadius: width * 0.03,
     padding: width * 0.035,
   },
+
   deleteIcon: {
     backgroundColor: "#ff0000",
   },
+
   editIcon: {
     backgroundColor: "#ffd700",
   },
+
   nameContainer: {
     position: "absolute",
     bottom: 0,
@@ -212,6 +217,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     padding: width * 0.04,
   },
+
   characterName: {
     color: "#ffffff",
     fontSize: width * 0.06,
@@ -220,15 +226,18 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
   },
+
   infoContainer: {
     padding: width * 0.04,
   },
+
   infoTitle: {
     color: "#ffffff",
     fontSize: width * 0.05,
     fontWeight: "bold",
     marginBottom: height * 0.02,
   },
+
   infoItem: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -239,14 +248,17 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.02,
     padding: width * 0.03,
   },
+
   infoLabel: {
     color: "#888",
     fontSize: width * 0.04,
   },
+
   infoValue: {
     flexDirection: "row",
     alignItems: "center",
   },
+
   statusContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -255,6 +267,7 @@ const styles = StyleSheet.create({
     paddingVertical: height * 0.005,
     paddingHorizontal: width * 0.02,
   },
+
   infoText: {
     color: "#ffffff",
     fontSize: width * 0.04,

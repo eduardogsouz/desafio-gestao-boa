@@ -1,5 +1,5 @@
 import { CharactersDatabase } from "@/types/CharacterDataBase";
-import React, { useEffect, useState } from "react";
+import React, { createRef, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -20,16 +20,21 @@ export default function CharacterList({
   isLoading,
   ...rest
 }: CharacterListProps) {
-  const [numberCards, setNumberCards] = useState(10);
+  const ref = useRef<FlatList>(null);
+  const [numberScroll, setNumberScroll] = useState(1);
   const [loadingCards, setLoadingCards] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isModalVisible, setModalVisible] = useState(true);
 
-  const renderData = data.slice(numberCards - 10, numberCards);
+  let sliceFinalNumber = 20 * numberScroll;
+  let sliceInitialNumber = 0;
+
+  sliceInitialNumber = sliceFinalNumber - 20;
+
+  const renderData = data.slice(sliceInitialNumber, sliceFinalNumber);
 
   const renderFooter = () => {
-    if (loadingCards == false) {
-      return null;
-    } else {
+    if (loadingCards == true) {
       return (
         <View
           style={{
@@ -42,6 +47,12 @@ export default function CharacterList({
         </View>
       );
     }
+  };
+
+  const whenEndOfList = () => {
+    ref.current?.scrollToOffset({ offset: 0, animated: true }),
+      setNumberScroll(numberScroll + 1),
+      setLoadingCards(true);
   };
 
   if (isLoading) {
@@ -67,11 +78,12 @@ export default function CharacterList({
   } else {
     return (
       <FlatList
+        ref={ref}
         data={renderData}
-        onEndReached={() => (
-          setNumberCards(numberCards + 20), setLoadingCards(true)
-        )}
-        onEndReachedThreshold={0.5}
+        onEndReached={whenEndOfList}
+        onEndReachedThreshold={0.1}
+        refreshing={loading}
+        onRefresh={() => (setNumberScroll(1), setLoading(false))}
         ListFooterComponent={renderFooter}
         {...rest}
       />

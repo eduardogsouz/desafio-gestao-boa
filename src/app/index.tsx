@@ -2,9 +2,8 @@ import {
   StyleSheet,
   View,
   Image,
-  Text,
   Dimensions,
-  ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { Link, router } from "expo-router";
@@ -25,13 +24,17 @@ const widthScreen = Dimensions.get("screen").width;
 const App = () => {
   const [characters, setCharacters] = useState<CharactersDatabase[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [whichStatus, setWhichStatus] = useState(2);
   const [search, setSearch] = useState("");
 
   const characterDatabase = useCharactersDatabase();
 
   async function list() {
     try {
-      const response = await characterDatabase.searchByName(search);
+      const response = await characterDatabase.searchByName(
+        search,
+        whichStatus
+      );
       setCharacters(response);
     } catch (error) {
       console.log(error);
@@ -49,23 +52,21 @@ const App = () => {
   }, [search, isLoading]);
 
   return (
-    <ScrollView
-      style={globalStyles.background}
-      contentContainerStyle={[styles.container]}
-    >
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Image
           style={styles.logo}
           source={require("@/assets/images/Logo.png")}
         />
-        <Link href={"/forms/CharacterCreationForm"} asChild>
-          <Button style={styles.homebuttons}>
-            <Button.Icon icon="plus" size={30} />
-          </Button>
-        </Link>
+        <Button
+          style={styles.homebuttons}
+          onPress={() => router.navigate("/forms/CharacterCreationForm")}
+        >
+          <Button.Icon icon="plus" size={30} />
+        </Button>
       </View>
 
-      <View style={{ flex: 1, flexDirection: "row", marginTop: "8%", gap: 10 }}>
+      <View style={styles.searchContainer}>
         <Input
           placeholder="Digite o nome do personagem!"
           placeholderTextColor={"rgba(158, 187, 187, 0.5)"}
@@ -81,7 +82,6 @@ const App = () => {
       <CharacterList
         isLoading={isLoading}
         data={characters}
-        scrollEnabled={false}
         numColumns={2}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
@@ -92,14 +92,15 @@ const App = () => {
         )}
         columnWrapperStyle={styles.listCards}
       />
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: "9%",
-    marginLeft: "4%",
+    flex: 1,
+    backgroundColor: "#1c1c1c",
+    paddingTop: heightScreen * 0.03,
   },
 
   logo: {
@@ -109,9 +110,11 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    flex: 1,
     flexDirection: "row",
-    gap: widthScreen * 0.39,
+    justifyContent: "space-around",
+    gap: widthScreen * 0.3,
+    alignItems: "center",
+    marginVertical: heightScreen * 0.01,
   },
 
   homebuttons: {
@@ -124,19 +127,25 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
+  searchContainer: {
+    flexDirection: "row",
+    marginLeft: widthScreen * 0.028,
+    marginVertical: heightScreen * 0.02,
+    gap: widthScreen * 0.03,
+  },
+
   searchinput: {
     color: "#FFFFFF",
     fontSize: 17,
     width: widthScreen * 0.766,
     backgroundColor: "#374151",
     borderRadius: 10,
-    height: "100%",
   },
 
   listCards: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 23,
+    justifyContent: "space-around",
     marginTop: 20,
   },
 });
