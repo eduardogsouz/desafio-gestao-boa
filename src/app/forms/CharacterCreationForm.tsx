@@ -10,14 +10,19 @@ import {
   Dimensions,
   Modal,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+
+import { Ionicons } from "@expo/vector-icons";
+import { useCharactersDatabase } from "@/database/useCharactersDatabase";
 
 const { width, height } = Dimensions.get("window");
 
 export default function CharacterCreationForm() {
+  const characterDatabase = useCharactersDatabase();
+  const genderOptions = ["Masculino", "Feminino", "Sem gênero", "Desconhecido"];
+
   const [name, setName] = useState("");
-  const [status, setStatus] = useState("Vivo");
+  const [status, setStatus] = useState(2);
   const [species, setSpecies] = useState("");
   const [type, setType] = useState("");
   const [gender, setGender] = useState("");
@@ -25,12 +30,30 @@ export default function CharacterCreationForm() {
   const [location, setLocation] = useState("");
   const [isGenderModalVisible, setIsGenderModalVisible] = useState(false);
 
-  const genderOptions = ["Masculino", "Feminino", "Sem gênero", "Desconhecido"];
+  async function handleCreate() {
+    try {
+      let tratedStatus;
+      if (status == 1) {
+        tratedStatus = true;
+      } else {
+        tratedStatus = false;
+      }
 
-  const handleSubmit = () => {
+      await characterDatabase.insert({
+        name: name,
+        status: tratedStatus,
+        species: species,
+        type: type,
+        gender: gender,
+        location_name: location,
+        origin_name: origin,
+        image: null,
+      });
+    } catch (error) {
+      console.log(error);
+    }
     router.back();
-    console.log({ name, status, species, type, gender, origin, location });
-  };
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -56,16 +79,20 @@ export default function CharacterCreationForm() {
 
           <Text style={styles.label}>Status</Text>
           <View style={styles.radioGroup}>
-            {["Vivo", "Morto"].map((option) => (
+            {["1", "0"].map((option: any) => (
               <TouchableOpacity
                 key={option}
                 style={styles.radioButton}
                 onPress={() => setStatus(option)}
               >
                 <View style={styles.radio}>
-                  {status === option && <View style={styles.radioSelected} />}
+                  {status == option && <View style={styles.radioSelected} />}
                 </View>
-                <Text style={styles.radioLabel}>{option}</Text>
+                {option == 1 ? (
+                  <Text style={styles.radioLabel}> Vivo </Text>
+                ) : (
+                  <Text style={styles.radioLabel}> Morto </Text>
+                )}
               </TouchableOpacity>
             ))}
           </View>
@@ -117,7 +144,7 @@ export default function CharacterCreationForm() {
             onChangeText={setLocation}
           />
 
-          <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>
+          <TouchableOpacity style={styles.addButton} onPress={handleCreate}>
             <Text style={styles.addButtonText}>ADICIONAR PERSONAGEM</Text>
           </TouchableOpacity>
         </View>

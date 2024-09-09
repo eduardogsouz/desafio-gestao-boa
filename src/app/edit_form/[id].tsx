@@ -17,16 +17,7 @@ import { useCharactersDatabase } from "@/database/useCharactersDatabase";
 const { width, height } = Dimensions.get("window");
 
 export default function CharacterEditingForm() {
-  const [data, setData] = useState({
-    name: "",
-    status: true,
-    species: "",
-    type: "",
-    gender: "",
-    origin_name: "",
-    location_name: "",
-  });
-
+  const [image, setImage] = useState<any>("");
   const [name, setName] = useState("");
   const [status, setStatus] = useState(0);
   const [species, setSpecies] = useState("");
@@ -52,15 +43,38 @@ export default function CharacterEditingForm() {
             setGender(response.gender),
             setOrigin(response.origin_name),
             setLocation(response.location_name);
+          setImage(response.image);
         }
       });
     }
   }, [params.id]);
 
-  const handleSubmit = () => {
-    router.back();
-    console.log({ name, status, species, type, gender, origin, location });
-  };
+  async function handleUpdate() {
+    try {
+      let tratedStatus;
+      if (status == 1) {
+        tratedStatus = true;
+      } else {
+        tratedStatus = false;
+      }
+
+      await characterDatabase.update({
+        id: params.id,
+        name: name,
+        status: tratedStatus,
+        species: species,
+        type: type,
+        gender: gender,
+        location_name: location,
+        origin_name: origin,
+        image: image,
+      });
+
+      router.back();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -80,7 +94,7 @@ export default function CharacterEditingForm() {
             style={styles.input}
             value={name}
             onChangeText={setName}
-            placeholder={data.name}
+            placeholder={name}
           />
 
           <Text style={styles.label}>Status</Text>
@@ -137,7 +151,7 @@ export default function CharacterEditingForm() {
             onChangeText={setLocation}
           />
 
-          <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
+          <TouchableOpacity style={styles.saveButton} onPress={handleUpdate}>
             <Text style={styles.saveButtonText}>SALVAR ALTERAÇÕES</Text>
           </TouchableOpacity>
         </View>

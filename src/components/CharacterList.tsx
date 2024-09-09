@@ -13,11 +13,13 @@ import Modal from "react-native-modal";
 type CharacterListProps = FlatListProps<any> & {
   data: CharactersDatabase[];
   isLoading: boolean;
+  hasTextSearch: string;
 };
 
 export default function CharacterList({
   data,
   isLoading,
+  hasTextSearch,
   ...rest
 }: CharacterListProps) {
   const ref = useRef<FlatList>(null);
@@ -26,8 +28,8 @@ export default function CharacterList({
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setModalVisible] = useState(true);
 
+  let sliceInitialNumber;
   let sliceFinalNumber = 20 * numberScroll;
-  let sliceInitialNumber = 0;
 
   sliceInitialNumber = sliceFinalNumber - 20;
 
@@ -50,9 +52,15 @@ export default function CharacterList({
   };
 
   const whenEndOfList = () => {
-    ref.current?.scrollToOffset({ offset: 0, animated: true }),
-      setNumberScroll(numberScroll + 1),
+    if (hasTextSearch.length >= 1 && data.length <= 20) {
+      sliceFinalNumber = 20;
+      setNumberScroll(1);
+      setLoadingCards(false);
+    } else {
+      ref.current?.scrollToOffset({ offset: 0, animated: true }),
+        setNumberScroll(numberScroll + 1);
       setLoadingCards(true);
+    }
   };
 
   if (isLoading) {

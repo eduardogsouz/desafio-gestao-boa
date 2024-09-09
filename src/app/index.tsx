@@ -13,7 +13,7 @@ import Button from "@/components/Button";
 import CharacterCard from "@/components/CharacterCard";
 import CharacterList from "@/components/CharacterList";
 import Input from "@/components/Input";
-import FilterModal from "@/components/modalFilter";
+import FilterModal from "@/components/FilterModal";
 
 import { CharactersDatabase } from "@/types/CharacterDataBase";
 import { tranferData } from "@/database/APIFromDatabase";
@@ -23,13 +23,13 @@ const heightScreen = Dimensions.get("screen").height;
 const widthScreen = Dimensions.get("screen").width;
 
 const App = () => {
+  const characterDatabase = useCharactersDatabase();
+
   const [characters, setCharacters] = useState<CharactersDatabase[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [whichStatus, setWhichStatus] = useState(2);
   const [search, setSearch] = useState("");
-  const [isFilterVisible, setIsFilterVisible] = useState(false);
-
-  const characterDatabase = useCharactersDatabase();
+  const [isOpenFilterVisible, setIsOpenFilterVisible] = useState(false);
 
   async function list() {
     try {
@@ -74,17 +74,18 @@ const App = () => {
           placeholderTextColor={"rgba(158, 187, 187, 0.5)"}
           textAlign="center"
           style={styles.searchinput}
-          onChangeText={setSearch}
+          onChangeText={(x) => setSearch(x)}
         />
         <Button
           style={styles.homebuttons}
-          onPress={() => setIsFilterVisible(true)}
+          onPress={() => setIsOpenFilterVisible(true)}
         >
           <Button.Icon icon="filter" size={30} />
         </Button>
       </View>
 
       <CharacterList
+        hasTextSearch={search}
         isLoading={isLoading}
         data={characters}
         numColumns={2}
@@ -100,9 +101,9 @@ const App = () => {
 
       <FilterModal
         whichStatus={whichStatus}
-        isVisible={isFilterVisible}
+        isVisible={isOpenFilterVisible}
         onApply={(status) => setWhichStatus(status)}
-        onClose={(visibility) => setIsFilterVisible(visibility)}
+        onClose={(visibility) => setIsOpenFilterVisible(visibility)}
       />
     </SafeAreaView>
   );

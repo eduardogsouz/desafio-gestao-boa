@@ -1,3 +1,4 @@
+import DeleteModal from "@/components/DeleteModal";
 import { useCharactersDatabase } from "@/database/useCharactersDatabase";
 import {
   Entypo,
@@ -19,6 +20,11 @@ import {
 
 const { width, height } = Dimensions.get("window");
 export default function Details() {
+  const characterDatabase = useCharactersDatabase();
+  const params = useLocalSearchParams<{ id: string }>();
+
+  const [isOpenDeleteVisible, setIsOpenDeleteVisible] = useState(false);
+  const [imageData, setImageData] = useState<any>();
   const [data, setData] = useState({
     name: "",
     status: true,
@@ -28,10 +34,15 @@ export default function Details() {
     origin_name: "",
     location_name: "",
   });
-  const [imageData, setImageData] = useState<any>();
 
-  const characterDatabase = useCharactersDatabase();
-  const params = useLocalSearchParams<{ id: string }>();
+  async function remove(id: number) {
+    try {
+      await characterDatabase.remove(id);
+      router.back();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     if (params.id) {
@@ -74,13 +85,23 @@ export default function Details() {
           <Image source={{ uri: `${imageData}` }} style={styles.image} />
         )}
         <View style={styles.iconContainer}>
-          <TouchableOpacity style={[styles.iconBackground, styles.deleteIcon]}>
+          <TouchableOpacity
+            style={[styles.iconBackground, styles.deleteIcon]}
+            onPress={() => setIsOpenDeleteVisible(true)}
+          >
             <MaterialCommunityIcons
               name="delete-outline"
               size={width * 0.06}
               color="#FFFFFF"
             />
           </TouchableOpacity>
+          <DeleteModal
+            itemName={data.name}
+            itemID={params.id}
+            isVisible={isOpenDeleteVisible}
+            onConfirm={(id) => remove(id)}
+            onClose={(visibility) => setIsOpenDeleteVisible(visibility)}
+          />
           <TouchableOpacity
             style={[styles.iconBackground, styles.editIcon]}
             onPress={() => router.navigate("/edit_form/" + params.id)}

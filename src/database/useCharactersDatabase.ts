@@ -76,7 +76,7 @@ export function useCharactersDatabase() {
 
   async function update(data: CharactersDatabase) {
     const statement = await database.prepareAsync(
-      "UPDATE products SET name = $name, status = $status, species = $species, type = $type, gender = $gender, origin_name = $origin_name, location_name = $location_name, WHERE id = $id"
+      "UPDATE characters SET name = $name, status = $status, species = $species, type = $type, gender = $gender, origin_name = $origin_name, location_name = $location_name WHERE id = $id"
     );
 
     try {
@@ -99,11 +99,11 @@ export function useCharactersDatabase() {
 
   async function remove(id: number) {
     try {
-      await database.execAsync("DELETE FROM products WHERE id = " + id);
+      await database.execAsync("DELETE FROM characters WHERE id = " + id);
     } catch (error) {
       throw error;
     }
   }
 
-  return { insert, searchByName, showDetails };
+  return { insert, searchByName, showDetails, remove, update };
 }
