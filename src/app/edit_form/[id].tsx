@@ -17,6 +17,10 @@ import { useCharactersDatabase } from "@/database/useCharactersDatabase";
 const { width, height } = Dimensions.get("window");
 
 export default function CharacterEditingForm() {
+  const characterDatabase = useCharactersDatabase();
+  const params = useLocalSearchParams<{ id: string }>();
+  const genderOptions = ["Masculino", "Feminino", "Sem gênero", "Desconhecido"];
+
   const [image, setImage] = useState<any>("");
   const [name, setName] = useState("");
   const [status, setStatus] = useState(0);
@@ -26,11 +30,6 @@ export default function CharacterEditingForm() {
   const [origin, setOrigin] = useState("");
   const [location, setLocation] = useState("");
   const [isGenderModalVisible, setIsGenderModalVisible] = useState(false);
-
-  const genderOptions = ["Masculino", "Feminino", "Sem gênero", "Desconhecido"];
-
-  const characterDatabase = useCharactersDatabase();
-  const params = useLocalSearchParams<{ id: string }>();
 
   useEffect(() => {
     if (params.id) {

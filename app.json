@@ -9,10 +9,14 @@
     "ios": {
       "supportsTablet": true
     },
-
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router"
+    ],
     "experiments": {
       "typedRoutes": false
+    },
+    "android": {
+      "package": "com.anonymous.RickAndMorty_Api"
     }
   }
 }

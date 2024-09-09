@@ -8,12 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 
-type FilterModalProps = ModalProps & {
-  isVisible: boolean;
-  whichStatus: number;
-  onClose: (isVisible: boolean) => void;
-  onApply: (status: number) => void;
-};
+import { FilterModalProps } from "@/types/TypeFilterModal";
 
 const { width, height } = Dimensions.get("window");
 

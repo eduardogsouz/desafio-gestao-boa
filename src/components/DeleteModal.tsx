@@ -9,15 +9,9 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 
-const { width, height } = Dimensions.get("window");
+import { DeleteModalProps } from "@/types/typeDeleteModal";
 
-type DeleteModalProps = ModalBaseProps & {
-  isVisible: boolean;
-  onClose: (visibility: boolean) => void;
-  onConfirm: (id: number) => void;
-  itemName: string;
-  itemID: string;
-};
+const { width, height } = Dimensions.get("window");
 
 export default function DeleteModal({
   isVisible,

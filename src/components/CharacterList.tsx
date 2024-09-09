@@ -1,20 +1,15 @@
-import { CharactersDatabase } from "@/types/CharacterDataBase";
 import { useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
-  FlatListProps,
   Text,
   View,
   StyleSheet,
 } from "react-native";
 import Modal from "react-native-modal";
 
-type CharacterListProps = FlatListProps<any> & {
-  data: CharactersDatabase[];
-  isLoading: boolean;
-  hasTextSearch: string;
-};
+import { CharactersDatabase } from "@/types/CharacterDataBase";
+import { CharacterListProps } from "@/types/typeCharacterList";
 
 export default function CharacterList({
   data,
@@ -26,8 +21,7 @@ export default function CharacterList({
   const [numberScroll, setNumberScroll] = useState(1);
   const [loadingCards, setLoadingCards] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(true);
-
+  const [isModalVisible] = useState(true);
   let sliceInitialNumber;
   let sliceFinalNumber = 20 * numberScroll;
 

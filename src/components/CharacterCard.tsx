@@ -1,27 +1,14 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  Pressable,
-  PressableProps,
-  TouchableOpacity,
-  TouchableOpacityProps,
-} from "react-native";
+import React from "react";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-type Props = TouchableOpacityProps & {
-  data: {
-    id: string;
-    name: string;
-    status: boolean;
-    species: string;
-    image: string | null;
-  };
-};
+import { CharacterTouchableProps } from "@/types/TypeCharacterTouchable";
 
-export default function CharacterCard({ data, ...rest }: Props) {
+export default function CharacterCard({
+  data,
+  ...rest
+}: CharacterTouchableProps) {
   return (
     <TouchableOpacity {...rest} style={styles.card}>
       <View>

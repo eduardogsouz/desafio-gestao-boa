@@ -1,6 +1,6 @@
 import { Pressable, PressableProps, Text, TextProps } from "react-native";
 
-import { IIconProps } from "@/interfaces/ButtonInterfaces";
+import { IIconProps } from "@/types/TypeIcon";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 
 function Button({ ...restProps }: PressableProps) {
